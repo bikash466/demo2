@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Your PDF Title</title>
+  <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+</head>
+<body>
+  <div id="pdf-container">
+    <iframe src="path/to/your/pdf.pdf" width="100%" height="600px"></iframe>
+  </div>
+  <script>
+    const pdfContainer = document.getElementById('pdf-container');
+    const iframe = pdfContainer.querySelector('iframe');
+
+    // Load the PDF using PDF.js
+    pdfjsLib.getDocument('https://bikash466.github.io/demo2/skill.pdf').then(function(pdf) {
+      // Render the PDF within the iframe
+      iframe.contentWindow.document.body.innerHTML = '';
+      pdf.getPage(1).then(function(page) {
+        const viewport = page.getViewport({ scale: 1.5 });
+        const canvas = document.createElement('canvas');
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+        const context = canvas.getContext('2d');
+        page.render({ canvasContext: context, viewport: viewport }).promise.then(function() {
+          iframe.contentWindow.document.body.appendChild(canvas);
+        });
+      });
+    });
+  </script>
+</body>
+</html>
